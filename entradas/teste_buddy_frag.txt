@@ -1,0 +1,11 @@
+# Fragmentacao do sistema buddy.
+# 4 blocos de 2 enchem a memoria 8. Apos liberar A e C (nao-companheiros),
+# ha 4 livres, mas nao existe bloco de 4: IN(F,4) deve falhar.
+8
+IN(A, 2)
+IN(B, 2)
+IN(C, 2)
+IN(D, 2)
+OUT(A)
+OUT(C)
+IN(F, 4)

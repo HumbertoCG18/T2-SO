@@ -1,0 +1,9 @@
+# Formato proposital baguncado para testar o parser.
+| 16 |
+
+in( a , 3 )
+IN(B,2)
+   Out( a )
+IN(  CdeNomeLongo ,1)
+OUT(B)
+out(CdeNomeLongo)

@@ -1,0 +1,11 @@
+# Fragmentacao externa (particoes variaveis).
+# Apos liberar A e C, ha 8 livres no total, porem em 2 blocos de 4.
+# IN(E,5) deve falhar: nenhum bloco contiguo comporta 5.
+16
+IN(A, 4)
+IN(B, 4)
+IN(C, 4)
+IN(D, 4)
+OUT(A)
+OUT(C)
+IN(E, 5)

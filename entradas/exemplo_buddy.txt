@@ -1,0 +1,11 @@
+# Exemplo do Sistema Buddy.
+# Memoria de 256 (segue a Figura 1 do enunciado: 21 -> bloco de 32).
+256
+IN(A, 21)
+IN(B, 60)
+IN(C, 130)
+OUT(A)
+OUT(B)
+IN(D, 32)
+OUT(C)
+OUT(D)
