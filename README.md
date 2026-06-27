@@ -26,7 +26,7 @@ src/
   memoria_buddy.py      Sistema Buddy
 entradas/               arquivos de requisições de exemplo
 tests/test_simulador.py testes automatizados
-MANUAL.md / doc/MANUAL.pdf   manual do usuário
+MANUAL.pdf   manual do usuário
 ```
 
 ## Como executar
@@ -69,4 +69,4 @@ python tests/test_simulador.py
 
 ## Mais detalhes
 
-Ver `MANUAL.md` (ou `doc/MANUAL.pdf`).
+Ver `MANUAL.pdf`.
