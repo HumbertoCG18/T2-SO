@@ -50,10 +50,12 @@ def ler_arquivo(caminho):
 
 
 def detectar_memoria(linhas):
+    # So a primeira linha efetiva (nao vazia, nao comentario) pode ser o tamanho.
     for raw in linhas:
         ev = parse_linha(raw)
-        if ev and ev[0] == "MEM":
-            return ev[2]
+        if ev is None:
+            continue
+        return ev[2] if ev[0] == "MEM" else None
     return None
 
 
@@ -111,10 +113,17 @@ def executar(mem, linhas, eh_buddy, passo):
     imprimir_estado(mem, eh_buddy)
 
     n = 0
+    primeira = True
     for raw in linhas:
         ev = parse_linha(raw)
-        if ev is None or ev[0] == "MEM":
+        if ev is None:
             continue
+        if ev[0] == "MEM":
+            if not primeira:
+                print(f"  [aviso] linha ignorada: {raw.strip()!r}")
+            primeira = False
+            continue
+        primeira = False
         if ev[0] == "?":
             print(f"  [aviso] linha ignorada: {ev[1]!r}")
             continue
@@ -253,11 +262,16 @@ def main():
     ap.add_argument("--passo", action="store_true")
     args = ap.parse_args()
 
-    if not args.tipo or not args.arquivo:
+    if not args.tipo and not args.arquivo:
         menu_interativo()
         return
+    if not args.tipo or not args.arquivo:
+        ap.error("--tipo e --arquivo devem ser informados juntos")
 
-    linhas = ler_arquivo(args.arquivo)
+    try:
+        linhas = ler_arquivo(args.arquivo)
+    except OSError as e:
+        sys.exit(f"Erro: nao foi possivel ler '{args.arquivo}' ({e.strerror or e}).")
     tamanho = args.memoria if args.memoria is not None else detectar_memoria(linhas)
     if tamanho is None:
         sys.exit("Erro: informe o tamanho da memoria com --memoria ou no arquivo.")
@@ -271,6 +285,8 @@ def main():
         print(f"[aviso] {tamanho} nao e potencia de 2 (ok para particoes variaveis).")
     if eh_buddy and not eh_potencia2(args.bloco_min):
         sys.exit(f"Erro: bloco minimo deve ser potencia de 2 (recebido {args.bloco_min}).")
+    if eh_buddy and args.bloco_min > tamanho:
+        sys.exit(f"Erro: bloco minimo ({args.bloco_min}) excede a memoria ({tamanho}).")
     mem = (MemoriaBuddy(tamanho, args.bloco_min) if eh_buddy
            else MemoriaVariavel(tamanho, args.politica))
     executar(mem, linhas, eh_buddy, args.passo)

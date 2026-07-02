@@ -48,7 +48,8 @@ class MemoriaBuddy:
         if j > self.ordem_max:
             raise EspacoInsuficiente()
 
-        offset = self.livres[j].pop()
+        offset = min(self.livres[j])
+        self.livres[j].remove(offset)
         while j > ordem:
             j -= 1
             companheiro = offset + (1 << j)
