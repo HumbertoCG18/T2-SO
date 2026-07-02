@@ -1,6 +1,7 @@
 # Simulador de gerenciamento de memoria - TP2.
 
 import argparse
+import os
 import re
 import sys
 
@@ -148,6 +149,37 @@ def executar(mem, linhas, eh_buddy, passo):
     print("=" * 60)
 
 
+DIR_ENTRADAS = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "entradas")
+
+
+def escolher_arquivo_entrada():
+    try:
+        arquivos = sorted(
+            f for f in os.listdir(DIR_ENTRADAS)
+            if f.lower().endswith(".txt")
+            and os.path.isfile(os.path.join(DIR_ENTRADAS, f))
+        )
+    except FileNotFoundError:
+        arquivos = []
+    if not arquivos:
+        print(f"    Nenhum arquivo .txt encontrado em {DIR_ENTRADAS}")
+        sys.exit(1)
+    print("\nArquivos disponiveis em 'entradas':")
+    for i, nome in enumerate(arquivos, 1):
+        print(f"  {i}) {nome}")
+    while True:
+        bruto = input("Escolha o arquivo [numero]: ").strip()
+        try:
+            idx = int(bruto)
+        except ValueError:
+            print("    Valor invalido. Tente novamente.")
+            continue
+        if 1 <= idx <= len(arquivos):
+            return os.path.join(DIR_ENTRADAS, arquivos[idx - 1])
+        print("    Numero fora do intervalo. Tente novamente.")
+
+
 def pedir_inteiro(prompt, padrao=None, validar=None):
     while True:
         bruto = input(prompt).strip()
@@ -186,7 +218,7 @@ def menu_interativo():
         p = input("Escolha a politica [1/2]: ").strip()
         politica = "circular" if p == "2" else "worst"
 
-    caminho = input("Arquivo de requisicoes: ").strip().strip('"')
+    caminho = escolher_arquivo_entrada()
     linhas = ler_arquivo(caminho)
     mem_arq = detectar_memoria(linhas)
 
