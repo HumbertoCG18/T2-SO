@@ -98,6 +98,16 @@ class MemoriaBuddy:
                 regioes.append((off, tam))
         return [tam for _, tam in regioes]
 
+    def fragmentacao_externa(self):
+        # Mesma metrica do particionamento variavel, sobre regioes fisicamente
+        # contiguas (blocos buddy adjacentes contam como uma regiao, mesmo
+        # quando nao podem coalescer por terem pais diferentes).
+        livres = self.livres_contiguos()
+        total = sum(livres)
+        if total == 0:
+            return 0.0
+        return 1 - max(livres) / total
+
     def mapa(self):
         blocos = [(off, tam, pid)
                   for pid, (off, tam, _) in self.alocados.items()]

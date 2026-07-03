@@ -94,6 +94,7 @@ def imprimir_estado(mem, eh_buddy):
     print(f"    Segm. : {fmt_segmentos(mapa)}")
     print(f"    Livres: {fmt_livres(livres)}   "
           f"({len(livres)} bloco(s) contiguo(s) livre(s), total {sum(livres)})")
+    print(f"    Fragmentacao externa: {mem.fragmentacao_externa():.1%}")
     if eh_buddy:
         buddy = mem.blocos_livres()
         print(f"    Buddy livres: {fmt_livres(buddy)}")

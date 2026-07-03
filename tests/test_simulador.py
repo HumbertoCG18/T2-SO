@@ -79,8 +79,18 @@ def teste_fragmentacao_externa():
     m.liberar("A")
     m.liberar("C")
     checa("livres dispersos [4,4]", m.blocos_livres() == [4, 4])
+    checa("frag externa 0.5 (maior 4 de 8)", m.fragmentacao_externa() == 0.5)
     falhou = not alocar_ok(m, "E", 5)
     checa("IN(E,5) -> ESPACO INSUFICIENTE (frag. externa)", falhou)
+    m.liberar("D")
+    checa("frag externa 1/3 apos OUT(D)",
+          abs(m.fragmentacao_externa() - 1 / 3) < 1e-9)
+    m.liberar("B")
+    checa("frag externa 0 com memoria toda livre", m.fragmentacao_externa() == 0.0)
+
+    m2 = MemoriaVariavel(8, "worst")
+    m2.alocar("X", 8)
+    checa("frag externa 0 com memoria cheia", m2.fragmentacao_externa() == 0.0)
 
 
 def teste_casos_de_erro():
@@ -173,7 +183,10 @@ def teste_buddy_fragmentacao():
     m.liberar("A")
     m.liberar("C")
     checa("dois blocos 2 nao coalescem", m.blocos_livres() == [2, 2])
+    checa("frag externa 0.5 (buracos em 0 e 4)", m.fragmentacao_externa() == 0.5)
     checa("IN(F,4) -> insuficiente (frag. do buddy)", not alocar_ok(m, "F", 4))
+    m.liberar("B")
+    checa("regiao contigua 0..6: frag externa 0", m.fragmentacao_externa() == 0.0)
 
 
 def teste_potencia2():

@@ -95,3 +95,13 @@ class MemoriaVariavel:
         return [s.tamanho for s in self.segmentos if s.livre]
 
     livres_contiguos = blocos_livres
+
+    def fragmentacao_externa(self):
+        # Fracao da memoria livre que nao pertence ao maior bloco contiguo:
+        # 0.0 = toda a memoria livre e utilizavel de uma vez; quanto maior,
+        # mais espalhados estao os buracos.
+        livres = self.livres_contiguos()
+        total = sum(livres)
+        if total == 0:
+            return 0.0
+        return 1 - max(livres) / total
